@@ -340,8 +340,9 @@ func (sr *sRunner) SplitStream(r io.Reader, del Deliverer) error {
 		_, record, err = sr.GetRecordFromStream(r)
 		if err != nil {
 			if err == io.ErrShortBuffer {
-				sr.ir.LogError(fmt.Errorf("record exceeded MAX_RECORD_SIZE %d",
-					message.MAX_RECORD_SIZE))
+				nFirstBytes := 20
+				sr.ir.LogError(fmt.Errorf("record exceeded MAX_RECORD_SIZE %d. First %d bytes of record were: %s",
+				message.MAX_RECORD_SIZE, nFirstBytes, record[0:nFirstBytes]))
 				err = nil
 			}
 		}
